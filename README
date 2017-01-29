@@ -1,0 +1,24 @@
+README
+
+Estructura archivo de salida (archsalida):
+	
+	Prioridad PID Estado Tiempo Comando
+
+	Ejemplo:
+
+		1 1345 L 5.6 javac
+
+Estructuras.h:
+	Colas ()
+	Procesos ()
+	Planificador
+
+
+Colas.h
+	Funciones que manejan las colas
+
+Planificador.h
+	Funciones que manejan el planificador
+
+Main.c
+	Programa
