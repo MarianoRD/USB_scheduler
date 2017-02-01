@@ -53,6 +53,12 @@ Contenido:
   Estructuras:
     En este archivo se declaran las estrucuras (structs) usadas en el programa.
 
+      struct Estado:
+        Estructura que mantiene el estado de un proceso. El estado para este 
+        caso particular, se maneja con solamente dos posibles valores:
+          "E" - En Ejecución
+          "L" - Listo
+
       struct Proceso: 
         Estructura que contiene toda la información necesaria de un proceso, 
         como a su vez, apuntadores al proceso siguiente y al proceso anterior, 
@@ -77,9 +83,10 @@ Contenido:
         estructura 'EstrucSched' dada.
 
       InicializarProceso:
-        Esta función recibe un proceso e inicializa los apuntadores 'next' y 
-        'prev' del mismo con el valor 'NULL', lo que permite asegurar un uso 
-        correcto de estos apuntadores por el resto del programa.
+        Esta función inicializa el proceso, solicitando la memoria necesaria 
+        para el almacenamiento del mismo y a su vez inicializa los apuntadores
+        'next' y 'prev' del mismo con el valor 'NULL', lo que permite asegurar
+        un uso correcto de estos apuntadores por el resto del programa.
 
       ImprimeProceso:
         Recibe un proceso e imprime la información del mismo de forma ordenada 
@@ -87,10 +94,11 @@ Contenido:
 
       Imprime:
         Recibe una estructura 'EstrucSched' e imprime toda la información de la 
-        misma por salida estándar. Primero indica con una línea la prioridad de 
-        la cola de procesos a imprimir. Luego imprime todos los procesos con 
-        dicha prioridad de forma ordenada (ver orden en 7). Todas las 
-        impresiones de esta función son realizadas por salida estándar.
+        misma por salida estándar (haciendo uso de la función ImprimeProceso). 
+        Primero indica con una línea la prioridad de la cola de procesos a 
+        imprimir. Luego imprime todos los procesos con dicha prioridad de 
+        forma ordenada (ver orden en 7). Todas las impresiones de esta función 
+        son realizadas por salida estándar.
 
       Guardar:
         Esta función recibe una estructura 'EstrucSched' y guarda de forma 
@@ -102,29 +110,81 @@ Contenido:
 
 
 
-Colas:
-  Funciones que manejan las colas
-  void InsertarProceso(EstrucSched* s, Proceso* p, short prioridad);
-void ElimProceso(EstrucSched* s, long pid, short prio);
-void ElimProcesoE(EstrucSched* s);
-Proceso *ProxProceso(EstrucSched* s);
-void CambiarEstado(EstrucSched* s, Proceso* p, char newestado);
+  Colas:
+    En estos archivos, se declaran y definen las funciones que le dan 
+    funcionalidad a la estructura 'Cola', las cuales, son las siguientes:
 
-Menu:
-  Funciones que manejan el menu
-  void ImprimeMenu();
-EstrucSched *Construye(char *filename);
-void EjecutaAccion(int opcion);
+    InsertarProceso:
+      Esta función recibe la estructura 'EstrucSched', un proceso y la 
+      prioridad de dicho proceso. Luego inserta el proceso al final de la cola 
+      de prioridad correspondiente.
 
-Main:
-  Programa
+    EliminarProceso:
+      Esta función recibe el proceso a eliminar y la cola donde se encuentra el 
+      mismo, de esta manera libera la memoria que ocupaba dicho proceso 
+      (el anterior y el siguiente en la cola) y actualiza los apuntadores de 
+      los procesos afectados por la eliminación del mismo, para que no se 
+      pierda el orden de la cola ni la capacidad de acceder a todos los 
+      procesos de una cola.
 
+
+    ElimProceso:
+      Esta función, dado el ID del proceso (PID) y la prioridad del mismo, 
+      busca el proceso en la cola apropiada, lo elimina de la misma usando 
+      la función EliminarProceso().
+
+    ElimProcesoE:
+      Esta función recibe la estructura 'EstrucSched', busca el proceso en 
+      ejecución de la misma y lo elimina, haciendo uso de la función 
+      EliminarProceso().
+
+    CambiarEstado:
+      Esta función cambia el estado de un proceso del estado que posee al 
+      momento de su llamada, al estado que le es pasado a la función como 
+      el parámetro 'newestado'.
+
+    ProxProceso:
+      Esta función recibe la estructura 'EstrucSched' y busca en la misma, el 
+      próximo proceso a ser planificado y puesto en ejecución. Para determinar 
+      cual es el proceso que debe ser ejecutado, busca en las colas de 
+      prioridades de forma descendente (mayor a menor prioridad) y además 
+      respeta el orden de las colas, siempre se atenderá al primer proceso de 
+      la cola de mayor prioridad. La función además, modifica el estado del 
+      proceso seleccionado de "Listo" a "EnEjecucióń" (usando CambiarEstado) y 
+      devuelve un apuntador al mismo.
+
+
+  Menu:
+    En estos archivos, se declaran y definen las funciones que le dan 
+    funcionalidad al Menu del programa y la función que crea e instancia la 
+    estructura principal del programa (EstrucSched). Dichas funciones son:
+
+      ImprimeMenu:
+        Esta función imprime el menú, mediante el cual se puede interactuar 
+        con el programa para realizar todas las funciones del mismo.
+
+      Construye:
+        Esta función, se ejecuta al inicio del programa y construye la 
+        estructura de datos inicial (EstrucSched), utilizando los datos del 
+        archivo que le fue pasado al momento de la invocación del ejecutable.
+
+      EjecutaAccion:
+        Esta función chequea la entrada que hizo el usuario en el Menú y toma 
+        las previsiones necesarias para poder ejecutar de forma exitosa las 
+        funciones que el usuario desea, para lograr esto, solicita los posibles 
+        datos que puedan faltar para ejecutar la opción solicitada por el 
+        usuario y llama a las funciones adecuadas en el orden correcto.
+
+
+  Main:
+    Archivo donde se mantiene la lógica inicial del programa, que permite que 
+    todo lo demás sea ejecutado.
 
 
 4- Estructura del archivo de salida:
 -------------------------------------
   
-  Cada linea contendrá la información de un único proceso, 
+  Cada línea contendrá la información de un único proceso, 
   en el siguiente orden: 
 
       Prioridad PID Estado Tiempo Comando

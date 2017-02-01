@@ -17,7 +17,7 @@ Contenido:
   1- Autores
   2- Archivos del programa
   3- Estructura del programa
-  4- Makefile
+  4- Estructuras de datos utilizadas
   5- Ejecución del programa
   6- Documentación
   7- Licencia
@@ -57,26 +57,40 @@ Contenido:
 
       main
           |
-          string.h
-          menu
+          |menu
             |
-            Colas
+            |Colas
               |
-              EstrucSched
+              |string.h
+              |EstrucSched
                 |
-                Estructuras
+                |Estructuras
                   |
-                  stblib stdio
+                  |stblib.h
+                  |stdio.h
 
 
+4- Estructuras de datos utilizadas:
+------------------------------------
+
+  En el programa se utilizaron las siguientes estructuras de datos:
+
+      - Estado
+      - Proceso
+      - Cola
+      - EstrucSched
+
+  Para más información sobre cada una de las estructuras, vea la 
+  Documentación (6), en la sección de Implementación.
 
 5- Ejecución del programa:
 ---------------------------
 
-  Para ejecutar el programa, solamente es necesario llamar al ejecutable generado
-  previamente por el 'makefile', el cual se llama 'pscheduler' y pasarle por la 
-  consola, en el mismo comando de su llamada, el nombre del archivo que contiene 
-  los datos iniciales y el archivo donde se desea que se guarden los datos al 
+  Para ejecutar el programa, es necesario llamar al ejecutable generado
+  previamente por el 'makefile', el cual se llamará 'pscheduler' y pasarle por 
+  el terminal, en el mismo comando de ejecución del ejecutable anteriormente 
+  mencionado se debe indicar, el nombre del archivo que contiene los datos 
+  iniciales y el nombre del archivo donde se desea que se guarden los datos al 
   terminar de correr el programa. 
 
       Ejemplo: $ pscheduler datos archsalida

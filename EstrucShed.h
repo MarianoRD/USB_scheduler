@@ -7,7 +7,7 @@
 // Declaración de funciones
 
 Cola* SeleccionarCola (EstrucSched *s, int seleccionador);
-void InicializarProceso(Proceso *proceso);
+Proceso* InicializarProceso();
 void ImprimeProceso(Proceso *proceso);
 void Imprime(EstrucSched *s);
 void Guardar(EstrucSched* s);

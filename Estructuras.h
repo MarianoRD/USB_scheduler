@@ -6,10 +6,15 @@
 
 // Declaración de estructuras
 
+typedef struct Estado
+{
+	char status[2];
+} Estado;
+
 typedef struct Proceso
 {
-	int		PID;
-	char	estado; // L: Listo, E: EnEjecución
+	long	PID;
+	Estado	estado; // L: Listo, E: EnEjecución
 	short	prioridad; // Usa solo 3 bits, valores: 0-5
 	float	tiempo;
 	char	comando[256];

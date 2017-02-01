@@ -1,7 +1,6 @@
 // Directivas
   
  // Librerías propias
-# include <string.h>
 #include "menu.h"
 
 // Declaración de funciones
@@ -16,7 +15,6 @@ int main(int argc, char* argv[]) {
   // datos = argv[1];
   // archsalida = argv[2];
   EstrucSched *estructura;
-  int salir = 0;
 
   // Asegurarse de que hayan ingresado el nombre de ambos archivos
   if (argc < 3) {
@@ -33,13 +31,9 @@ int main(int argc, char* argv[]) {
   strcpy(estructura->salida, argv[2]);
 
   // Inicializa el ciclo y el menu
-  while(salir == 0) {
-    ImprimeMenu(&estructura, salir);
+  while(1) {
+    ImprimeMenu(estructura);
   }
-
-  // Se guardan los datos
-  Guardar(estructura);
-  printf("Estructura guardada en %c \n", *estructura->salida);
 
   // Finaliza
   return 0;

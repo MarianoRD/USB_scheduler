@@ -30,19 +30,27 @@ Cola* SeleccionarCola(EstrucSched *s, short prioridad) {
 	return cola;
 }
 
-// Inicializa los apuntadores de un proceso.
-void InicializarProceso(Proceso *proceso) {
+// Inicializa un proceso y los apuntadores del mismo proceso.
+Proceso* InicializarProceso() {
+	
+	// Se crea el espacio de memoria
+	Proceso* proceso = malloc(sizeof(Proceso));
+
+	// Se inicializa la estructura
+	// Se inicializan los apuntadores
 	proceso->next = NULL;
 	proceso->prev = NULL;
+
+	return proceso;
 }
 
 // Imprime por Salida Estandar un proceso.
 void ImprimeProceso(Proceso *proceso) {
 	printf("\t %hi ", proceso->prioridad);
-	printf("%d ", proceso->PID);
-	printf("%c ", proceso->estado);
+	printf("%ld ", proceso->PID);
+	printf("%s ", (proceso->estado).status);
 	printf("%f ", proceso->tiempo);
-	printf("%c \n", *proceso->comando); // Chequear
+	printf("%s \n", proceso->comando); // Chequear
 }
 
 // Imprime en pantalla, toda la información de la estructura de Colas.
@@ -52,7 +60,7 @@ void Imprime(EstrucSched *s) {
 	Cola *cola;
 
 	for (i = 0; i < 6; i++) {
-		printf("Procesos con prioridad: %d \n", i); 
+		printf("\nProcesos con prioridad %d:\n", i); 
 		cola = SeleccionarCola(s, i);
 		proceso = cola->head;
 		while (proceso != NULL) {
@@ -72,24 +80,25 @@ void Guardar(EstrucSched* s) {
 	Cola *cola;
 	// Abre el archivo
 	archivo = fopen(s->salida, "w");
-	// Caso inicial
-	cola = &(s->q0);
-	proceso = cola->head;
+
+	// Se itera en las colas
 	for (i = 0; i < 6; i++) {
+
+		// Cambia de colas
+		cola = SeleccionarCola(s, i);
+		proceso = cola->head;
+
 		while (proceso != NULL) {
 			// Escribe la información del proceso
-			fprintf(archivo, "\t %hi ", proceso->prioridad);
-			fprintf(archivo, "%d ", proceso->PID);
-			fprintf(archivo, "%c ", proceso->estado);
+			fprintf(archivo, "%hi ", proceso->prioridad);
+			fprintf(archivo, "%ld ", proceso->PID);
+			fprintf(archivo, "%s ", proceso->estado.status);
 			fprintf(archivo, "%f ", proceso->tiempo);
-			fprintf(archivo, "%c \n", *proceso->comando); // Chequear
+			fprintf(archivo, "%s \n", proceso->comando); // Chequear
 
 			// Cambia el proceso
 			proceso = proceso->next;
 		}
-		// Cambia de colas
-		cola = SeleccionarCola(s, i);
-		proceso = cola->head;
 	}
 	// Cierra el archivo
 	fclose(archivo);
