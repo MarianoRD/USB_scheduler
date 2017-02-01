@@ -14,13 +14,10 @@ void InsertarProceso(EstrucSched *s, Proceso *p, short prioridad) {
 
 	// Agrega el elemento a la cola correspondiente
 	if (cola->head == NULL) { // Cola vacía
-		p->next = NULL;
-		p->prev = NULL;
 		cola->head = p;
 		cola->tail = p;
 	} else { // Cola con al menos un elemento.
 		// Actualiza apuntadores del proceso.
-		p->next = NULL;
 		p->prev = cola->tail;
 		// Actualiza apuntadores de la cola.
 		(cola->tail)->next = p;

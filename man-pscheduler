@@ -1,0 +1,151 @@
+
+
+********************************************************************************
+*                              man-pscheduler                                  *
+********************************************************************************
+
+
+En este archivo se encuentra la documentación de pscheduler
+
+
+Contenido:
+-----------
+  
+  1- Autores
+  2- Makefile
+  3- Implementación
+  4- Estructura del archivo de salida
+  5- Variables de estado
+
+
+
+1- Autores:
+------------
+  
+  Mariano Rodríguez 12-10892
+  Pablo Gonzalez 13-10575
+
+
+
+2- Makefile:
+-------------
+
+  Para ejecutar el makefile, es suficiente con ejecutar el comando 'make' en el
+  directorio con todos los archivos especificados en el punto 2 de este archivo.
+
+  El 'makefile' viene diseñado, para generar el ejecutable de forma autónoma. 
+  Además permite borrar todos los archivos creados por el mismo 
+  (incluyendo el ejecutable). 
+
+  Para modificar el comportamiento del 'makefile', se puede acceder al mismo 
+  y modificarlo.
+
+  Para no eliminar el ejecutable:
+  	Modificar la línea 33 del archivo de la siguiente forma:
+  		Antes: rm -f pscheduler $(OBJS)
+  		Después: rm -f $(OBJS)
+
+
+
+3- Implementación:
+----------------------------
+
+  Estructuras:
+    En este archivo se declaran las estrucuras (structs) usadas en el programa.
+
+      struct Proceso: 
+        Estructura que contiene toda la información necesaria de un proceso, 
+        como a su vez, apuntadores al proceso siguiente y al proceso anterior, 
+        para facilitar la manipulación de los mismos en el programa.
+
+      struct Cola:
+        Estructura que contiene solamente dos apuntadores del tipo Proceso.
+        Con esta estructura, se es capaz de organizar y acceder a los procesos 
+        de forma eficiente.
+
+      struct EstrucSched:
+        Estructura que contiene 6 colas, tratadas en este programa como colas
+        de prioridades, lo que permite el manejo de los procesos y las colas.
+
+  EstrucShed:
+    En estos archivos, se declaran y definen las funciones que le dan 
+    funcionalidad a la estructura 'EstrucSched', las cuales, son las siguientes:
+
+      SeleccionarCola:
+        Esta función, recibe una 'EstrucSched' y una prioridad, para devolver la
+        cola que contiene los procesos de la prioridad dada dentro de la 
+        estructura 'EstrucSched' dada.
+
+      InicializarProceso:
+        Esta función recibe un proceso e inicializa los apuntadores 'next' y 
+        'prev' del mismo con el valor 'NULL', lo que permite asegurar un uso 
+        correcto de estos apuntadores por el resto del programa.
+
+      ImprimeProceso:
+        Recibe un proceso e imprime la información del mismo de forma ordenada 
+        (ver orden en 7) por salida estándar.
+
+      Imprime:
+        Recibe una estructura 'EstrucSched' e imprime toda la información de la 
+        misma por salida estándar. Primero indica con una línea la prioridad de 
+        la cola de procesos a imprimir. Luego imprime todos los procesos con 
+        dicha prioridad de forma ordenada (ver orden en 7). Todas las 
+        impresiones de esta función son realizadas por salida estándar.
+
+      Guardar:
+        Esta función recibe una estructura 'EstrucSched' y guarda de forma 
+        ordenada en un archivo (cuyo nombre es pasado en la inicialización 
+        del programa (5)). Se guardan los procesos tal cual se encuentran 
+        en el momento de la llamada de la función, comenzando por los de 
+        mayor prioridad. Cada línea del archivo de texto contiene un 
+        proceso (ver orden en 7).
+
+
+
+Colas:
+  Funciones que manejan las colas
+  void InsertarProceso(EstrucSched* s, Proceso* p, short prioridad);
+void ElimProceso(EstrucSched* s, long pid, short prio);
+void ElimProcesoE(EstrucSched* s);
+Proceso *ProxProceso(EstrucSched* s);
+void CambiarEstado(EstrucSched* s, Proceso* p, char newestado);
+
+Menu:
+  Funciones que manejan el menu
+  void ImprimeMenu();
+EstrucSched *Construye(char *filename);
+void EjecutaAccion(int opcion);
+
+Main:
+  Programa
+
+
+
+4- Estructura del archivo de salida:
+-------------------------------------
+  
+  Cada linea contendrá la información de un único proceso, 
+  en el siguiente orden: 
+
+      Prioridad PID Estado Tiempo Comando
+
+      Ejemplo:
+
+        1 1345 L 5.6 javac
+
+
+
+5- Variables de estado:
+------------------------
+
+  Estado de ejecución de un proceso:
+    L - Listo
+    E - EnEjecución
+
+  Colas -> ElimProcesoE -> eliminado:
+    0 - Sin eliminar
+    1 - Eliminado
+
+  main -> salir:
+    0 - No salir
+    1 - Salir del programa
