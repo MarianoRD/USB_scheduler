@@ -1,4 +1,5 @@
 // Directivas
+#include "EstrucShed.h"
 
 // Funciones
 
@@ -8,16 +9,20 @@
 */
 void InsertarProceso(EstrucSched *s, Proceso *p, short prioridad) {
 	// Elije la cola correspondiente a la prioridad del proceso 'p'
-	Cola *cola = ObtenerColaPrioridad(*s, prioridad);
+	Cola *cola = SeleccionarCola(s, prioridad);
 	 // Arreglar notación
 
 	// Agrega el elemento a la cola correspondiente
-	if (cola.head == NULL) { // Cola vacía
+	if (cola->head == NULL) { // Cola vacía
 		p->next = NULL;
 		p->prev = NULL;
 		cola->head = p;
 		cola->tail = p;
-	} else { // Cola con al menos un elemento
+	} else { // Cola con al menos un elemento.
+		// Actualiza apuntadores del proceso.
+		p->next = NULL;
+		p->prev = cola->tail;
+		// Actualiza apuntadores de la cola.
 		(cola->tail)->next = p;
 		cola->tail = p;
 	}
@@ -30,21 +35,21 @@ void InsertarProceso(EstrucSched *s, Proceso *p, short prioridad) {
 */
 void ElimProceso(EstrucSched* s, long pid, short prio) {
 	// Variables
-	Nodo *nodoActual = NULL;
+	Proceso *procesoActual = NULL;
 
 	// Elije la cola correspondiente a la prioridad del proceso 'p'
-	Cola *cola = ObtenerColaPrioridad(*s, prio);
+	Cola *cola = SeleccionarCola(s, prio);
 
 	// Busca el nodo a eliminar
-	nodoActual = &(cola->head);
-	while (nodoActual->PID != pid && *(nodoActual->next) != NULL) {
-		nodoActual = nodoActual->next;
+	procesoActual = cola->head;
+	while (procesoActual->PID != pid && procesoActual->next != NULL) {
+		procesoActual = procesoActual->next;
 	}
-	if (nodoActual->PID == pid) {
-		(nodoActual->prev)->next = nodoActual->next;
-		(nodoActual->next)->prev = nodoActual->prev;
+	if (procesoActual->PID == pid) {
+		(procesoActual->prev)->next = procesoActual->next;
+		(procesoActual->next)->prev = procesoActual->prev;
 		// Se libera la memoria
-			free(nodoActual);
+		free(procesoActual);
 		printf("Proceso Eliminado.\n");
 	} else {
 		printf("El proceso ID: %li con prioridad: %hi. No se consiguió.\n", pid, prio);
@@ -59,67 +64,60 @@ void ElimProcesoE(EstrucSched *s) {
 	* ARREGLAR SINTAXIS Y FUNCION PARA QUE PUEDA BORRAR MÁS QUE EL ÚLTIMO ELEMENTO
 	*/
 	// Declaraciones de variables
-	int i, j;
+	int i;
 	Proceso *proceso;
 	Cola *cola;
-	int seleccionadorCola = 0;
-	bool eliminado = false;
+	short eliminado = 0; // 0: No Eliminado
 
-	proceso = s->q0.tail; // Caso inicial
+	proceso = (s->q0).tail; // Caso inicial
 	
 	// Se busca y se elimina el proceso en ejecución en todas las colas
-	for (i = 0; i <= 5; i++) {
-		while (proceso->prev != NULL) {
-			if (proceso.estado == "E") {
+	for (i = 1; i <= 5; i++) {
+		while (proceso == NULL) {
+			if (proceso->estado == 1) {
 				(proceso->prev)->next = proceso->next;
 				(proceso->next)->prev = proceso->prev;
 				// Se libera la memoria
 				free(proceso);
-				eliminado = true;
+				eliminado = 1;
 				break;
-			} else if {
+			} else {
 				proceso = proceso->prev;
 			}
 		}
-		if (eliminado == true) {
-			break;
-		} else if { // Se cambia de cola
-			seleccionadorCola += 1;
-			cola = SeleccionarCola(*s, seleccionadorCola);
-			proceso = cola->tail;
-		} else if (seleccionadorCola > 5) {
-				printf("Algo esta mal eliminando el Proceso en ejecución, pasó de 5.\n");
-				printf("No hay ningún proceso en ejecución\n");
-		}
+			if (eliminado == 1) {
+				return;
+			} else{ // Se cambia de cola
+				cola = SeleccionarCola(s, i);
+				proceso = cola->tail;
+			} 
 	}
+	// En caso de no poder eliminar un proceso.
+	printf("Algo esta mal eliminando el Proceso en ejecución, pasó de 5.\n");
+	printf("No hay ningún proceso en ejecución\n");
 }
 
 Proceso *ProxProceso(EstrucSched *s) {
 		// Declaraciones de variables
-		Proceso *proceso;
+		Proceso *proceso = NULL;
 		Cola *cola;
 		int seleccionadorCola = 0;
+		// Busca el primer proceso con mayor prioridad.
 		while (proceso == NULL) {
-			cola = SeleccionarCola(*s, seleccionadorCola);
+			cola = SeleccionarCola(s, seleccionadorCola);
 			proceso = cola->head;
 			seleccionadorCola += 1;
-			if (seleccionadorCola > 5) {
+;			if (seleccionadorCola > 5) {
 				printf("Algo esta mal Seleccionando el prox Proceso en ejecución, pasó de 5.\n");
 			}
 	}
 	return proceso;
 }
-void CambiarEstado(EstrucSched *s, Proceso *p, newestado) {
+
+void CambiarEstado(EstrucSched *s, Proceso *p, char newestado) {
 	// ¿Por qué pasan el apuntador a la estructura y al proceso?
 	// ¿Se puede modificar directamente el proceso?
 
 	// Se cambia el estado del proceso
 	p->estado = newestado;
 }
-
-// Constantes y Variables Globales
-
-// Variables
-
-// Funciones
-

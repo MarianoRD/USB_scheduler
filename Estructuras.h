@@ -1,6 +1,4 @@
 // Estructuras.h
-#ifndef ESTRUCTURAS_INCLUDED
-#define ESTRUCTURAS
 
 // Directivas
 #include <stdlib.h>
@@ -10,13 +8,13 @@
 
 typedef struct Proceso
 {
-	const 	int		PID;
-	char	estado;
-	short	prioridad;
+	int		PID;
+	char	estado; // 0: Listo, 1: EnEjecución
+	short	prioridad; // Usa solo 3 bits, valores: 0-5
 	float	tiempo;
-	const 	char	comando[256];
-	void *prev;
-	void *next;
+	char	comando[256];
+	struct 	Proceso *prev;
+	struct 	Proceso *next;
 	
 } Proceso;
 
@@ -34,6 +32,5 @@ typedef struct EstrucSched
 	Cola 	q3;
 	Cola 	q4;
 	Cola 	q5;	
+	char	salida[256];
 } EstrucSched;
-
-#endif

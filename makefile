@@ -1,29 +1,33 @@
-# makefile del projecto
+# Makefile para compilar la Tarea.
 
 # Variables
 CC = gcc
-CFLAGS = -I
-OBJECTS = main.o Estructuras.o Colas.o EstrucShed.o
+CFLAGS = -g -Wall
+OBJS = main.o menu.o Colas.o EstrucShed.o
+
+# Regla all
+all: pscheduler
 
 # Creacion del ejecutable
 
-pscheduler: $(OBJECTS)
-	gcc -o pscheduler $(OBJECTS)
+pscheduler: $(OBJS) Estructuras.h
+	gcc $(CFLAGS) -o pscheduler $(OBJS)
 
 # Creación de los Object-Files (.o)
 
-main.o: main.c Estructuras.o Colas.o EstrucShed.o
-	gcc -c main.c Estructuras.o Colas.o EstrucShed.o
+main.o: main.c menu.o Colas.o EstrucShed.o Estructuras.h
+	gcc $(CFLAGS) -c main.c
 
-Estructuras.o: Estructuras.h Estructuras.c
-	gcc -c Estructuras.c
+menu.o: menu.h Colas.o EstrucShed.o Estructuras.h
+	gcc $(CFLAGS) -c menu.c
 
-Colas.o: Colas.h Colas.c Estructuras.h
-	gcc -c Colas.c
+Colas.o: Colas.h EstrucShed.o Estructuras.h
+	gcc $(CFLAGS) -c Colas.c
 
-EstrucShed.o: EstrucShed.h EstrucShed.c Estructuras.h
-	gcc -c EstrucShed.c
+EstrucShed.o: EstrucShed.h Estructuras.h
+	gcc $(CFLAGS) -c EstrucShed.c
 
 # Clean
 
-clean: rm $(OBJECTS)
+clean: 
+	rm -f pscheduler $(OBJS)

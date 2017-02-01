@@ -1,6 +1,4 @@
 // EstrucShed.h
-#ifndef ESTRUCSCHED_INCLUDED
-#define ESTRUCSCHED
 
 // Directivas
 #include "Estructuras.h"
@@ -8,10 +6,8 @@
 
 // Declaración de funciones
 
-EstrucSched *Construye(char *filename);
+Cola* SeleccionarCola (EstrucSched *s, int seleccionador);
+void InicializarProceso(Proceso *proceso);
+void ImprimeProceso(Proceso *proceso);
 void Imprime(EstrucSched *s);
 void Guardar(EstrucSched* s);
-Cola ObtenerColaPrioridad(EstrucSched* s, short prioridad);
-Cola SeleccionarCola (EstrucSched *s, int seleccionador);
-
-#endif
