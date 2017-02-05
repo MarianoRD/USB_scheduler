@@ -22,7 +22,8 @@ int main(int argc, char* argv[]) {
     printf("Por favor introducir el nombre del archivo donde están los datos");
     printf(" y el nombre de archivo donde se desean guardar los datos al");
     printf(" finalizar la ejecución del programa.\n\n");
-    return 0;
+    // Sale con codigo de error
+    exit(-1);
   }
 
   // Crea la estructura de datos EstrucShed

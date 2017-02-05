@@ -37,5 +37,6 @@ typedef struct EstrucSched
 	Cola 	q3;
 	Cola 	q4;
 	Cola 	q5;	
+	Proceso *ejecutando;
 	char	salida[256];
 } EstrucSched;

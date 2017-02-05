@@ -46,11 +46,11 @@ Proceso* InicializarProceso() {
 
 // Imprime por Salida Estandar un proceso.
 void ImprimeProceso(Proceso *proceso) {
-	printf("\t %hi ", proceso->prioridad);
-	printf("%ld ", proceso->PID);
-	printf("%s ", (proceso->estado).status);
-	printf("%f ", proceso->tiempo);
-	printf("%s \n", proceso->comando); // Chequear
+	printf("\t     %hi    ", proceso->prioridad);
+	printf("  %ld", proceso->PID);
+	printf("    %s  ", (proceso->estado).status);
+	printf(" %f", proceso->tiempo);
+	printf("     %s \n", proceso->comando); // Chequear
 }
 
 // Imprime en pantalla, toda la información de la estructura de Colas.
@@ -61,6 +61,7 @@ void Imprime(EstrucSched *s) {
 
 	for (i = 0; i < 6; i++) {
 		printf("\nProcesos con prioridad %d:\n", i); 
+		printf("\t Prioridad PID Estado Tiempo     Comando \n");
 		cola = SeleccionarCola(s, i);
 		proceso = cola->head;
 		while (proceso != NULL) {

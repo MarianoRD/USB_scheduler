@@ -2,7 +2,7 @@
 
 # Variables
 CC = gcc
-CFLAGS = -g -Wall
+CFLAGS = -g -Wall -Wextra
 OBJS = main.o menu.o Colas.o EstrucShed.o
 
 # Regla all

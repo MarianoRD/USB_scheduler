@@ -11,7 +11,6 @@
 void InsertarProceso(EstrucSched *s, Proceso *p, short prioridad) {
 	// Elije la cola correspondiente a la prioridad del proceso 'p'
 	Cola *cola = SeleccionarCola(s, prioridad);
-	 // Arreglar notación
 
 	// Agrega el elemento a la cola correspondiente
 	if (cola->head == NULL) { // Cola vacía
@@ -25,23 +24,28 @@ void InsertarProceso(EstrucSched *s, Proceso *p, short prioridad) {
 		cola->tail = p;
 	}
 
-	printf("Proceso insertado.\n");
+	printf("Proceso %ld insertado.\n", p->PID);
 }
 
-void EliminarProceso(Proceso *procesoActual, Cola *cola) {
-			// Chequea que no sea el primero
-		if (procesoActual->prev != NULL) {
-		(procesoActual->prev)->next = procesoActual->next;
-		} else { // De ser el primero
-			cola->head = procesoActual->next;
-		}
-		// Chequea que no sea el ultimo
-		if (procesoActual->next != NULL) {
-			(procesoActual->next)->prev = procesoActual->prev;
-		}
-		// Se libera la memoria
-		free(procesoActual);
-		printf("Proceso Eliminado.\n");
+void EliminarProceso(Proceso *proceso, Cola *cola) {
+
+	if (proceso->next == NULL && proceso->prev == NULL) { // Único en la cola
+		cola->head = NULL;
+		cola->tail = NULL;
+	} else if (proceso->prev == NULL) { //Es el primero
+		cola->head = proceso->next;
+		(proceso->next)->prev = NULL;
+	} else if (proceso->next == NULL) { //Es el último
+		cola->tail = proceso->prev;
+		(proceso->prev)->next = NULL;
+	} else { // Cualquier otra posición
+		(proceso->prev)->next = proceso->next;
+		(proceso->next)->prev = proceso->prev;
+	}
+
+	free(proceso);
+	printf("\nProceso Eliminado.\n");
+	return;
 }
 
 /**
@@ -73,42 +77,25 @@ void ElimProceso(EstrucSched* s, long pid, short prio) {
 void ElimProcesoE(EstrucSched *s) {
 
 	// Declaraciones de variables
-	int i;
-	Proceso *proceso;
 	Cola *cola;
-	short eliminado = 0; // 0: No Eliminado
-	
-	// Se busca y se elimina el proceso en ejecución en todas las colas
-	for (i = 0; i < 6; i++) {
 
-		// Se cambia de cola
-		cola = SeleccionarCola(s, i);
-		proceso = cola->tail;
+	if (s->ejecutando == NULL) {
+		printf("No hay ningún proceso en ejecución, no se eliminó ningún proceso.\n");
+	} else {
+		// Se busca la cola donde pertenece el proceso
+		cola = SeleccionarCola(s, s->ejecutando->prioridad);
 
-		while (proceso != NULL) {
-			if (strcmp((proceso->estado).status, "L")) {
-				EliminarProceso(proceso, cola);
-				eliminado = 1;
-				break;
-			} else {
-				proceso = proceso->prev;
-			}
-		}
-		if (eliminado == 1) {
-			return;
-		}
+		EliminarProceso(s->ejecutando, cola);
+		s->ejecutando = NULL;
 	}
-	// En caso de no poder eliminar un proceso.
-	printf("Algo esta mal eliminando el Proceso en ejecución, pasó de 5.\n");
-	printf("No hay ningún proceso en ejecución\n");
+	return;
 }
 
 void CambiarEstado(EstrucSched *s, Proceso *p, Estado newestado) {
-	// ¿Por qué pasan el apuntador a la estructura y al proceso?
-	// ¿Se puede modificar directamente el proceso?
 
 	// Se cambia el estado del proceso
 	strcpy(p->estado.status, newestado.status);
+
 	return;
 }
 
@@ -131,12 +118,14 @@ Proceso *ProxProceso(EstrucSched *s) {
 
 		// Si no hay procesos
 		if (proceso == NULL) {
-			printf("No se consiguió un proceso en la estructura\n");
+			printf("No se consiguieron procesos en la estructura\n");
 			return proceso;
 		}
 		// Next en cabeza
 		if (proceso->next == NULL) { // Si es el unico proceso de la cola
 			CambiarEstado(s, proceso, ejecucion);
+			// Se cambia el proceso en ejecucion
+			s->ejecutando = proceso;
 			return proceso;
 		} else {
 		cola->head = proceso->next;
@@ -147,6 +136,8 @@ Proceso *ProxProceso(EstrucSched *s) {
 		InsertarProceso(s, proceso, proceso->prioridad);
 		// Cambiar estado de L a E
 		CambiarEstado(s, proceso, ejecucion);
+		// Se cambia el proceso en ejecucion
+		s->ejecutando = proceso;
 
 	return proceso;
 }

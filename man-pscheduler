@@ -71,7 +71,8 @@ Contenido:
 
       struct EstrucSched:
         Estructura que contiene 6 colas, tratadas en este programa como colas
-        de prioridades, lo que permite el manejo de los procesos y las colas.
+        de prioridades, lo que permite el manejo de los procesos y las colas y 
+        un apuntador al proceso en ejecución.
 
   EstrucShed:
     En estos archivos, se declaran y definen las funciones que le dan 
